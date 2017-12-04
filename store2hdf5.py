@@ -52,8 +52,8 @@ def store2hdf5(
 		data_set = hdf_file['data']
 		labels_set = hdf_file['labels']
 
-	data_set[:,:,:,startloc['data']:startloc['data']+chunksz] = data
-	labels_set[:,:,:,startloc['label']:startloc['label']+chunksz] = labels
+	data_set[:,:,startloc['data']:startloc['data']+chunksz] = data
+	labels_set[:,:,startloc['label']:startloc['label']+chunksz] = labels
 	
 	hdf_file.close()
 
