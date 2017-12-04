@@ -15,8 +15,8 @@ root_path = os.path.abspath(os.curdir)
 def main():
 	for mode in range(2):
 		# settings
-		#folder = 'tmp'
 		folder = 'Train'
+		#folder = 'tmp'
 		savepath = 'train.h5'
 		size_input = hyper.hyper['size_input']
 		size_label = hyper.hyper['size_label']
@@ -62,10 +62,11 @@ def main():
 			[height, width] = im_label.shape
 			#[width, height] = im_label.shape
 			im_input = cv2.resize(
-					cv2.resize(im_label, (width/scale,height/scale), interpolation=cv2.INTER_CUBIC),
+					cv2.resize(im_label.copy(), (width/scale,height/scale), interpolation=cv2.INTER_CUBIC),
 					(width,height),
 					interpolation=cv2.INTER_CUBIC
 				)
+			im_label = im_label - im_input
 
 			for x in range(0, height - size_input, stride):
 				for y in range(0, width - size_input, stride):
@@ -92,8 +93,8 @@ def main():
 
 		for batch_No in range(batch_num):
 			last_read = batch_No*chunk_size
-			batch_data = data[:,:,0,last_read:last_read+chunk_size]
-			batch_labels = label[:,:,0,last_read:last_read+chunk_size]
+			batch_data = data[:,:,:,last_read:last_read+chunk_size]
+			batch_labels = label[:,:,:,last_read:last_read+chunk_size]
 
 			startloc = {'data':total_count,'label':total_count}
 			curr_dat_sz = store2hdf5(filename,batch_data,batch_labels,count,first_flag,startloc,chunk_size)
